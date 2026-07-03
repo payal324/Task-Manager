@@ -1,0 +1,127 @@
+const taskInput = document.getElementById("taskinput");
+const addBtn = document.getElementById("addBtn");
+const taskList = document.getElementById("tasklist");
+const searchInput =document.getElementById("searchInput");
+
+// Load tasks from localStorage
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let editingIndex = null;
+
+// Save tasks
+function saveTask() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// Display all tasks
+function renderTask() {
+
+    taskList.innerHTML = "";
+    const searchInput = searchInput.value.toLowerCase();
+
+    tasks.forEach(function (task, index) {
+
+        if(!task.text.toLowerCase().includes(SearchText)){
+            return;
+        }
+
+        searchInput.addEventListener("input", function () {
+
+    renderTask();
+
+});
+
+        const li = document.createElement("li");
+
+        const span = document.createElement("span");
+        span.textContent = task.text;
+
+        // Show completed style
+        if (task.completed) {
+            span.classList.add("completed");
+        }
+
+        // Toggle completed
+        span.addEventListener("click", function () {
+
+            tasks[index].completed = !tasks[index].completed;
+
+            saveTask();
+            renderTask();
+
+        });
+
+        // Edit button
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+
+        editBtn.addEventListener("click", function () {
+
+            taskInput.value = tasks[index].text;
+
+            editingIndex = index;
+
+            addBtn.textContent = "Update";
+
+        });
+
+        // Delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+
+        deleteBtn.addEventListener("click", function () {
+
+            tasks.splice(index, 1);
+
+            saveTask();
+            renderTask();
+
+        });
+
+        li.appendChild(span);
+        li.appendChild(editBtn);
+        li.appendChild(deleteBtn);
+
+        taskList.appendChild(li);
+
+    });
+
+}
+
+// Add / Update Task
+addBtn.addEventListener("click", function () {
+
+    const task = taskInput.value.trim();
+
+    if (task === "") {
+        alert("Please enter a task!");
+        return;
+    }
+
+    // Update existing task
+    if (editingIndex !== null) {
+
+        tasks[editingIndex].text = task;
+
+        editingIndex = null;
+
+        addBtn.textContent = "Add";
+
+    } else {
+
+        // Add new task
+        tasks.push({
+            text: task,
+            completed: false
+        });
+
+    }
+
+    saveTask();
+    renderTask();
+
+    taskInput.value = "";
+
+});
+
+// Load tasks when page opens
+renderTask();
