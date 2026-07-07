@@ -10,10 +10,13 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height:100vh;
+    padding:20px;
 }
+
 .container{
-    width: 600px;
-    box-shadow: 0px 8px 20px rgba(0,0,0, 0.15);
+    width: 650px;
+    box-shadow: 0px 10px 30px rgba(0,0,0, 0.12);
     background-color: white;
     border-radius: 10px;
     padding: 30px;
@@ -23,6 +26,7 @@ body{
 .container h1{
     text-align: center;
     margin-top: 25px;
+    color:#333;
 }
 
 .input-box{
@@ -40,10 +44,11 @@ body{
     outline: none;
     font-size: 16px;
     margin-bottom: 30px;
+    transition:all .3s ease;
     
 }
 
-#taskinput :focus{
+#taskinput:focus{
     border-color: royalblue;
 }
 
@@ -56,6 +61,7 @@ body{
     color: white;
     padding: 12px 20px;
     margin-bottom: 30px;
+    transition:all .3s ease;
 
 }
 
@@ -63,7 +69,7 @@ body{
     background: #214fc6;
 }
 
-#taskList {
+#tasklist {
     list-style: none;
     margin-top: 25px;
 }
@@ -75,25 +81,54 @@ body{
     background: #f5f5f5;
     padding: 12px;
     margin-top: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
+    transition:all .3s ease;
+    
+}
+
+#tasklist li:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0, 0.08);
+}
+
+#tasklist span{
+    flex:1;
+    cursor:pointer;
+    font-size:17px;
 }
 
 #tasklist button{
     padding: 8px 12px;
-    color: white;
-    background: crimson;
     border-radius: 6px;
     border: none;
     cursor: pointer;
 }
 
-#tasklist button:hover{
-    background: darkred;
+#tasklist button:first-of-type{
+    background: #f39c12;
+    color: white;
 }
 
-.complete{
+#tasklist button:last-of-type{
+    background: crimson;
+    color: white;
+}
+
+#tasklist button:hover{
+    transform:scale(1.05);
+}
+
+.task-counter{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    padding-top: 15px;
+    font-weight: bold;
+}
+
+.completed{
     text-decoration: line-through;
-    color: green;
+    color:#777;
     font-weight: bold;
 }
 
@@ -106,5 +141,46 @@ body{
     outline: none;
     font-size: 16px;
     margin-bottom: 30px;
+}
 
+.task-counter {
+    margin-top: 20px;
+    padding: 15px;
+    border-top: 2px solid #ddd;
+}
+
+.task-counter p {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.filter-buttons{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.filter-buttons button{
+    flex:1;
+    padding:10px;
+    border:none;
+    background:#ececec;
+    border-radius:8px;
+    cursor:pointer;
+    transition:all .3s ease;
+}
+
+.filter-buttons button:hover{
+    background:royalblue;
+    color:white;
+}
+
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#999;
+    border-radius:20px;
 }

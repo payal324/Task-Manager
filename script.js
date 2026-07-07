@@ -2,6 +2,11 @@ const taskInput = document.getElementById("taskinput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("tasklist");
 const searchInput =document.getElementById("searchInput");
+const totalTasks = document.getElementById("totalTasks");
+const completedTasks = document.getElementById("completedTasks");
+const pendingTasks = document.getElementById("pendingTasks");
+
+ 
 
 // Load tasks from localStorage
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
@@ -16,19 +21,20 @@ function saveTask() {
 function renderTask() {
 
     taskList.innerHTML = "";
-    const searchInput = searchInput.value.toLowerCase();
+    const SearchText = searchInput.value.toLowerCase();
+
+    if(tasks.length === 0){
+
+        taskList.innerHTML = "<li>📋 No tasks available.</li>";
+
+    }
+
 
     tasks.forEach(function (task, index) {
 
         if(!task.text.toLowerCase().includes(SearchText)){
             return;
         }
-
-        searchInput.addEventListener("input", function () {
-
-    renderTask();
-
-});
 
         const li = document.createElement("li");
 
@@ -52,7 +58,7 @@ function renderTask() {
 
         // Edit button
         const editBtn = document.createElement("button");
-        editBtn.textContent = "Edit";
+        editBtn.textContent = "✏ Edit";
 
         editBtn.addEventListener("click", function () {
 
@@ -64,9 +70,10 @@ function renderTask() {
 
         });
 
+
         // Delete button
         const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Delete";
+        deleteBtn.textContent = "🗑 Delete";
 
         deleteBtn.addEventListener("click", function () {
 
@@ -85,7 +92,21 @@ function renderTask() {
 
     });
 
+    totalTasks.textContent = tasks.length;
+
+    completedTasks.textContent =
+        tasks.filter(task => task.completed).length;
+
+    pendingTasks.textContent =
+        tasks.filter(task => !task.completed).length;
+
 }
+
+ searchInput.addEventListener("input", function () {
+
+    renderTask();
+
+});
 
 // Add / Update Task
 addBtn.addEventListener("click", function () {
@@ -97,6 +118,14 @@ addBtn.addEventListener("click", function () {
         return;
     }
 
+    taskInput.addEventListener("keypress", function(event){
+
+    if(event.key === "Enter"){
+        addBtn.click();
+    }
+
+});
+
     // Update existing task
     if (editingIndex !== null) {
 
@@ -105,6 +134,8 @@ addBtn.addEventListener("click", function () {
         editingIndex = null;
 
         addBtn.textContent = "Add";
+
+        taskInput.value="";
 
     } else {
 
@@ -123,5 +154,15 @@ addBtn.addEventListener("click", function () {
 
 });
 
+taskInput.addEventListener("keypress", function(event) {
+
+    if (event.key === "Enter") {
+        addBtn.click();
+    }
+
+});
+
 // Load tasks when page opens
+
 renderTask();
+
