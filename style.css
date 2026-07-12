@@ -5,212 +5,329 @@
     font-family: Arial, sans-serif;
 }
 
-body{
-    background:#f3f4f6;
+body {
+    background: #f3f4f6;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height:100vh;
-    padding:20px;
+    min-height: 100vh;
+    padding: 20px;
 }
 
-.container{
-    width: 650px;
-    box-shadow: 0px 10px 30px rgba(0,0,0, 0.12);
-    background-color: white;
+.container {
+    width: 100%;
+    max-width: 650px;
+    background: white;
     border-radius: 10px;
     padding: 30px;
-
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.12);
 }
 
-.container h1{
+.container h1 {
     text-align: center;
-    margin-top: 25px;
-    color:#333;
+    margin-bottom: 25px;
+    color: #333;
 }
 
-.input-box{
+/* ================= INPUT SECTION ================= */
+
+.input-box {
     display: flex;
     gap: 10px;
-    margin:20px 0px;
-    border-bottom:2px solid #ddd;
+    margin: 20px 0;
+    flex-wrap: wrap;
 }
 
-#taskinput{
+#taskinput,
+#searchInput,
+#priority,
+#dueDate {
     padding: 12px;
-    border: 2px solid#ddd;
+    border: 2px solid #ddd;
     border-radius: 8px;
-    flex:1;
     outline: none;
-    font-size: 16px;
-    margin-bottom: 30px;
-    transition:all .3s ease;
-    
+    font-size: 15px;
+    transition: .3s;
 }
 
-#taskinput:focus{
+#taskinput {
+    flex: 1;
+}
+
+#taskinput:hover,
+#searchInput:hover,
+#priority:hover,
+#dueDate:hover {
     border-color: royalblue;
 }
 
-#addBtn{
-    background: royalblue;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    color: white;
-    padding: 12px 20px;
-    margin-bottom: 30px;
-    transition:all .3s ease;
-
+#taskinput:focus,
+#searchInput:focus,
+#priority:focus,
+#dueDate:focus {
+    border-color: royalblue;
 }
 
-#addBtn:hover{
+/* ================= BUTTON ================= */
+
+#addBtn {
+    background: royalblue;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+#addBtn:hover {
     background: #214fc6;
 }
 
+/* ================= SEARCH ================= */
+
+#searchInput {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* ================= TASK LIST ================= */
+
 #tasklist {
     list-style: none;
-    margin-top: 25px;
 }
 
-#tasklist li{
+#tasklist li {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 10px;
     background: #f5f5f5;
-    padding: 12px;
     margin-top: 10px;
+    padding: 12px;
     border-radius: 10px;
-    transition:all .3s ease;
-    
+    transition: .3s;
+    animation: fadeIn .3s ease;
+    word-break: break-word;
 }
 
-#tasklist li:hover{
+#tasklist li:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0, 0.08);
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
 }
 
-#tasklist span{
-    flex:1;
-    cursor:pointer;
-    font-size:17px;
+#tasklist span {
+    flex: 1;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-#tasklist button{
+#tasklist button {
+    border: none;
     padding: 8px 12px;
     border-radius: 6px;
-    border: none;
     cursor: pointer;
+    transition: .3s;
 }
 
-#tasklist button:first-of-type{
+#tasklist button:first-of-type {
     background: #f39c12;
     color: white;
 }
 
-#tasklist button:last-of-type{
+#tasklist button:last-of-type {
     background: crimson;
     color: white;
 }
 
-#tasklist button:hover{
-    transform:scale(1.05);
+#tasklist button:hover {
+    transform: scale(1.05);
+    opacity: .9;
 }
 
-.task-counter{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 25px;
-    padding-top: 15px;
-    font-weight: bold;
-}
+/* ================= COMPLETED ================= */
 
-.completed{
+.completed {
     text-decoration: line-through;
-    color:#777;
+    opacity: .7;
+}
+
+/* ================= PRIORITY ================= */
+
+.priority {
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
     font-weight: bold;
 }
 
-
-#searchInput{
-    padding: 12px;
-    border: 2px solid#ddd;
-    border-radius: 8px;
-    flex:1;
-    outline: none;
-    font-size: 16px;
-    margin-bottom: 30px;
+.high {
+    background: #e74c3c;
 }
+
+.medium {
+    background: #f39c12;
+}
+
+.low {
+    background: #2ecc71;
+}
+
+/* ================= DATE ================= */
+
+.date {
+    color: #555;
+    font-size: 14px;
+}
+
+/* ================= Sort ================== */
+#sortTasks{
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+    transition: all .3s ease;
+}
+
+#sortTasks:hover{
+    border-color: royalblue;
+}
+
+#sortTasks:focus{
+    border-color: royalblue;
+    box-shadow: 0 0 8px rgba(65,105,225,0.3);
+}
+
+/* ================= COUNTER ================= */
 
 .task-counter {
+    display: flex;
+    justify-content: space-between;
     margin-top: 20px;
-    padding: 15px;
+    padding-top: 15px;
     border-top: 2px solid #ddd;
-}
-
-.task-counter p {
-    margin: 5px 0;
     font-weight: bold;
 }
 
-.filter-buttons{
-    display:flex;
-    gap:10px;
-    margin-bottom:20px;
+/* ================= FILTER BUTTONS ================= */
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-.filter-buttons button{
-    flex:1;
-    padding:10px;
-    border:none;
-    background:#ececec;
-    border-radius:8px;
-    cursor:pointer;
-    transition:all .3s ease;
+.filter-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #ececec;
+    cursor: pointer;
+    transition: .3s;
 }
 
-.filter-buttons button:hover{
-    background:royalblue;
-    color:white;
-}
-
-
-::-webkit-scrollbar{
-    width:8px;
-}
-
-::-webkit-scrollbar-thumb{
-    background:#999;
-    border-radius:20px;
-}
-
-
-.dark-mode{
-    background-color: #1e1e1e;
+.filter-buttons button:hover {
+    background: royalblue;
     color: white;
 }
 
-.dark-mode .container{
-    background-color: #2c2c2c;
+/* ================= DARK MODE ================= */
+
+.dark-mode {
+    background: #1e1e1e;
+    color: white;
 }
 
-.dark-mode h1{
-    color:white;
+.dark-mode .container {
+    background: #2c2c2c;
+}
+
+.dark-mode h1 {
+    color: white;
 }
 
 .dark-mode #taskinput,
-.dark-mode #searchInput{
-    background:#444;
-    color:white;
-    border:2px solid #666;
+.dark-mode #searchInput,
+.dark-mode #priority,
+.dark-mode #dueDate {
+    background: #444;
+    color: white;
+    border: 2px solid #666;
 }
 
-.dark-mode #tasklist li{
-    background:#3a3a3a;
+.dark-mode #tasklist li {
+    background: #3a3a3a;
 }
 
-.dark-mode .filter-buttons button{
-    background:#555;
-    color:white;
+.dark-mode .filter-buttons button {
+    background: #555;
+    color: white;
+}
+
+.dark-mode #sortTasks{
+    background: #444;
+    color: white;
+    border: 2px solid #666;
+}
+
+.dark-mode #sortTasks:hover,
+.dark-mode #sortTasks:focus{
+    border-color: royalblue;
+}
+
+/* ================= SCROLLBAR ================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #999;
+    border-radius: 20px;
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadeIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width:768px) {
+
+    .input-box {
+        flex-direction: column;
+    }
+
+    #tasklist li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #tasklist button {
+        width: 100%;
+    }
+
+    .task-counter {
+        flex-direction: column;
+        gap: 10px;
+    }
+
 }

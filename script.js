@@ -1,42 +1,163 @@
 const taskInput = document.getElementById("taskinput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("tasklist");
-const searchInput =document.getElementById("searchInput");
+const searchInput = document.getElementById("searchInput");
 const totalTasks = document.getElementById("totalTasks");
 const completedTasks = document.getElementById("completedTasks");
 const pendingTasks = document.getElementById("pendingTasks");
-
+const priority = document.getElementById("priority");
+const dueDate = document.getElementById("dueDate");
 const themeBtn = document.getElementById("themeBtn");
+const sortTasks = document.getElementById("sortTasks");
 
+// Load Theme
 if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark-mode");
     themeBtn.textContent = "☀️ Light Mode";
 }
 
- 
-
-// Load tasks from localStorage
+// Load Tasks
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let editingIndex = null;
 
-// Save tasks
+// Save Tasks
 function saveTask() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// Display all tasks
+// Render Tasks
 function renderTask() {
 
     taskList.innerHTML = "";
-    const SearchText = searchInput.value.toLowerCase();
 
-    if(tasks.length === 0){
+    const searchText = searchInput.value.toLowerCase();
 
-        taskList.innerHTML = "<li>📋 No tasks available.</li>";
+    // Sort Tasks
+    if (sortTasks.value === "priority") {
+
+        const priorityOrder = {
+            High: 1,
+            Medium: 2,
+            Low: 3
+        };
+
+        tasks.sort(function (a, b) {
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
 
     }
 
-    themeBtn.addEventListener("click", function () {
+    // No Tasks
+    if (tasks.length === 0) {
+
+        taskList.innerHTML = "<li>📋 No tasks available.</li>";
+
+        totalTasks.textContent = 0;
+        completedTasks.textContent = 0;
+        pendingTasks.textContent = 0;
+
+        return;
+    }
+
+    tasks.forEach(function (task, index) {
+
+        if (!task.text.toLowerCase().includes(searchText)) {
+            return;
+        }
+
+        const li = document.createElement("li");
+
+        // Task Name
+        const span = document.createElement("span");
+        span.textContent = task.text;
+
+        if (task.completed) {
+            span.classList.add("completed");
+        }
+
+        span.addEventListener("click", function () {
+
+            tasks[index].completed = !tasks[index].completed;
+
+            saveTask();
+            renderTask();
+
+        });
+
+        // Due Date
+        const dateSpan = document.createElement("span");
+        dateSpan.textContent = task.dueDate || "";
+        dateSpan.classList.add("date");
+
+        // Priority
+        const prioritySpan = document.createElement("span");
+        prioritySpan.textContent = task.priority;
+        prioritySpan.classList.add("priority");
+
+        if (task.priority === "High") {
+            prioritySpan.classList.add("high");
+        } else if (task.priority === "Medium") {
+            prioritySpan.classList.add("medium");
+        } else {
+            prioritySpan.classList.add("low");
+        }
+
+        // Edit
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "✏ Edit";
+
+        editBtn.addEventListener("click", function () {
+
+            taskInput.value = task.text;
+            priority.value = task.priority;
+            dueDate.value = task.dueDate;
+
+            editingIndex = index;
+
+            addBtn.textContent = "Update";
+
+        });
+
+        // Delete
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "🗑 Delete";
+
+        deleteBtn.addEventListener("click", function () {
+
+            tasks.splice(index, 1);
+
+            saveTask();
+            renderTask();
+
+        });
+
+        li.appendChild(span);
+        li.appendChild(dateSpan);
+        li.appendChild(prioritySpan);
+        li.appendChild(editBtn);
+        li.appendChild(deleteBtn);
+
+        taskList.appendChild(li);
+
+    });
+
+    // Counters
+    totalTasks.textContent = tasks.length;
+
+    completedTasks.textContent =
+        tasks.filter(task => task.completed).length;
+
+    pendingTasks.textContent =
+        tasks.filter(task => !task.completed).length;
+}
+
+// Search
+searchInput.addEventListener("input", function () {
+    renderTask();
+});
+
+// Dark Mode
+themeBtn.addEventListener("click", function () {
 
     document.body.classList.toggle("dark-mode");
 
@@ -54,83 +175,9 @@ function renderTask() {
 
 });
 
-
-    tasks.forEach(function (task, index) {
-
-        if(!task.text.toLowerCase().includes(SearchText)){
-            return;
-        }
-
-        const li = document.createElement("li");
-
-        const span = document.createElement("span");
-        span.textContent = task.text;
-
-        // Show completed style
-        if (task.completed) {
-            span.classList.add("completed");
-        }
-
-        // Toggle completed
-        span.addEventListener("click", function () {
-
-            tasks[index].completed = !tasks[index].completed;
-
-            saveTask();
-            renderTask();
-
-        });
-
-        // Edit button
-        const editBtn = document.createElement("button");
-        editBtn.textContent = "✏ Edit";
-
-        editBtn.addEventListener("click", function () {
-
-            taskInput.value = tasks[index].text;
-
-            editingIndex = index;
-
-            addBtn.textContent = "Update";
-
-        });
-
-
-        // Delete button
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "🗑 Delete";
-
-        deleteBtn.addEventListener("click", function () {
-
-            tasks.splice(index, 1);
-
-            saveTask();
-            renderTask();
-
-        });
-
-        li.appendChild(span);
-        li.appendChild(editBtn);
-        li.appendChild(deleteBtn);
-
-        taskList.appendChild(li);
-
-    });
-
-    totalTasks.textContent = tasks.length;
-
-    completedTasks.textContent =
-        tasks.filter(task => task.completed).length;
-
-    pendingTasks.textContent =
-        tasks.filter(task => !task.completed).length;
-
-}
-
- searchInput.addEventListener("input", function () {
-
+// Sort
+sortTasks.addEventListener("change", function () {
     renderTask();
-
 });
 
 // Add / Update Task
@@ -143,31 +190,23 @@ addBtn.addEventListener("click", function () {
         return;
     }
 
-    taskInput.addEventListener("keypress", function(event){
-
-    if(event.key === "Enter"){
-        addBtn.click();
-    }
-
-});
-
-    // Update existing task
     if (editingIndex !== null) {
 
         tasks[editingIndex].text = task;
+        tasks[editingIndex].priority = priority.value;
+        tasks[editingIndex].dueDate = dueDate.value;
 
         editingIndex = null;
 
         addBtn.textContent = "Add";
 
-        taskInput.value="";
-
     } else {
 
-        // Add new task
         tasks.push({
             text: task,
-            completed: false
+            completed: false,
+            priority: priority.value,
+            dueDate: dueDate.value
         });
 
     }
@@ -176,10 +215,13 @@ addBtn.addEventListener("click", function () {
     renderTask();
 
     taskInput.value = "";
+    dueDate.value = "";
+    priority.selectedIndex = 0;
 
 });
 
-taskInput.addEventListener("keypress", function(event) {
+// Enter Key
+taskInput.addEventListener("keydown", function (event) {
 
     if (event.key === "Enter") {
         addBtn.click();
@@ -187,7 +229,5 @@ taskInput.addEventListener("keypress", function(event) {
 
 });
 
-// Load tasks when page opens
-
+// Initial Load
 renderTask();
-

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
 
@@ -14,9 +16,28 @@
 
         <div class="input-box">
             <input type="text" id="taskinput" placeholder="Enter a new task">
+
+            <input type="date" id="dueDate">
             <input type="text" name="" id="searchInput" placeholder="Search Task...">
+
+            <input type="text" id="searchInput" placeholder="🔍 Search Task">
+
+            <select id="sortTasks">
+                <option value="default">📋 Sort By</option>
+                <option value="priority">🔥 Priority</option>
+                <option value="date">📅 Due Date</option>
+                <option value="completed">✅ Completed</option>
+            </select>
             <button id="addBtn">Add</button>
         </div>
+
+        <select id="priority">
+            <option value="High">🔴 High</option>
+            <option value="Medium">🟡 Medium</option>
+            <option value="Low">🟢 Low</option>
+        </select>
+
+
 
         <ul id="tasklist"></ul>
 
@@ -26,14 +47,15 @@
             <p>Pending: <span id="pendingTasks">0</span></p>
         </div>
 
-        
-       
+
+
     </div>
 
-   
 
-    
+
+
     <script src="script.js"></script>
     <script src="storage.js"></script>
 </body>
+
 </html>
